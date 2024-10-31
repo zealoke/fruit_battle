@@ -1,30 +1,39 @@
 unit AnimalUnitClass;
 
+
 interface
 
 uses
   System.SysUtils;
 
-// какие бывают звери: барсук, енот
+const
+  CmaxNumMemb = 20; // максимальное количество зверей в команде
+
 type
+  TAnimal = Class; // предопределение класса
+  TAnimalTeam = array [1..CmaxNumMemb] of TAnimal;
+
+  // какие бывают звери: барсук, енот
   TBeast = (badger, raccoon);
 
-// базовый класс зверей
-type
+  // базовый класс зверей
   TAnimal = Class(TObject)
     private
-      hp    : integer;
-      alive : boolean;
-      beast : TBeast;
+      hp       : integer;
+      attacked : boolean;
+      alive    : boolean;
+      beast    : TBeast;
       procedure Damage();
     public
-      constructor Create(beast : TBeast);
+      constructor Create(beast : TBeast); overload;
+      function ReturnHP(): integer;
       function IsAlive(): boolean;
       procedure Attack(numMemb : integer; // количество зверей в командах
 //                     соперники,   союзники
-                       rivalsArray, alliesArray : array of TAnimal);
+                       rivalsArray, alliesArray : TAnimalTeam);
+      procedure ResetDamage();
       procedure IsDead();
-End;
+  End;
 
 
 implementation
@@ -32,16 +41,28 @@ implementation
 
 { TAnimal }
 
-constructor TAnimal.Create;
+constructor TAnimal.Create(beast : TBeast);
 begin
-  self.hp    := 10;
-  self.alive := TRUE;
-  self.beast := beast;
+  self.hp       := 10;
+  self.attacked := FALSE;
+  self.alive    := TRUE;
+  self.beast    := beast;
 end;
 
 procedure TAnimal.Damage;
 begin
-  self.hp := self.hp - 2;
+  self.hp       := self.hp - 2;
+  self.attacked := TRUE;
+end;
+
+procedure TAnimal.ResetDamage;
+begin
+  self.attacked := FALSE;
+end;
+
+function TAnimal.ReturnHP: integer;
+begin
+  ReturnHP := self.hp;
 end;
 
 function TAnimal.IsAlive: boolean;
