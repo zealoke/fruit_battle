@@ -8,7 +8,7 @@ uses
   AnimalUnitClass; // in 'AnimalUnitClass.pas';
 
 type
-  TTeamVar = (A,B);
+  TTeamVar = (A,B,draw);
 
   // массивы с описанием членов команд
   TTeam = record
@@ -29,6 +29,7 @@ type
       teamNum : integer; // количество зверей в командах
       matches : integer; // количество сыгранных матчей
       stat    : TStat;   // статистика матчей
+      winer   : TTeamVar;
     public
       constructor Create(teamNum, matches : integer);
       function ReturnTeamNum() : integer;
@@ -38,6 +39,8 @@ type
       procedure Add(teamVar : TTeamVar; num : integer; beast : TBeast);
       procedure Fight();
       function NowIsDead(teamVar : TTeamVar; num : integer) : boolean;
+      function Stop() : boolean;
+      function ReturnWiner: TTeamVar;
   End;
 
 
@@ -52,6 +55,7 @@ begin
   self.stat.A    := 0;
   self.stat.B    := 0;
   self.stat.draw := 0;
+  self.winer     := draw;
 end;
 
 
@@ -152,6 +156,43 @@ end;
 function TGameLogic.ReturnTeamNum: integer;
 begin
   ReturnTeamNum := self.teamNum;
+end;
+
+function TGameLogic.ReturnWiner: TTeamVar;
+begin
+  ReturnWiner := self.winer;
+end;
+
+function TGameLogic.Stop() : boolean;
+var
+  teamAdead, teamBdead : boolean;
+  i : integer;
+begin
+  teamAdead := TRUE;
+  teamBdead := TRUE;
+  for i := 1 to self.teamNum do begin
+    if self.team.A[i].IsAlive then teamAdead := FALSE;
+    if self.team.B[i].IsAlive then teamBdead := FALSE;
+  end;
+  if teamAdead and teamBdead then
+    begin
+      self.stat.draw := self.stat.draw + 1;
+      self.winer := draw;
+      Stop := TRUE;
+    end;
+  if not teamAdead and teamBdead then
+    begin
+      self.stat.A := self.stat.A + 1;
+      self.winer := A;
+      Stop := TRUE;
+    end;
+  if teamAdead and not teamBdead then
+    begin
+      self.stat.B := self.stat.B + 1;
+      self.winer := B;
+      Stop := TRUE;
+    end;
+  if not teamAdead and not teamBdead then Stop := FALSE;
 end;
 
 procedure TGameLogic.Add;
