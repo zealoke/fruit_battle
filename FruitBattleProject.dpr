@@ -27,8 +27,11 @@ begin
 
     Writeln('--- Команда: А ---');
     for i := 1 to Game.ReturnTeamNum() do begin
-      Write('Выберите участника [Е]нот [Б]арсук: ');
-      Readln(beast);
+      beast := ' ';
+      while (beast <> 'Е') and (beast <> 'Б') do begin
+        Write('Выберите участника ',i,' ([Е]нот [Б]арсук): ');
+        Readln(beast);
+      end;
       case beast of
         'Е' : Game.Add(A,i,raccoon);
         'Б' : Game.Add(A,i,badger);
@@ -37,8 +40,11 @@ begin
 
     Writeln('--- Команда: Б ---');
     for i := 1 to Game.ReturnTeamNum() do begin
-      Write('Выберите участника [Е]нот [Б]арсук: ');
-      Readln(beast);
+      beast := ' ';
+      while (beast <> 'Е') and (beast <> 'Б') do begin
+        Write('Выберите участника ',i,' ([Е]нот [Б]арсук): ');
+        Readln(beast);
+      end;
       case beast of
         'Е' : Game.Add(B,i,raccoon);
         'Б' : Game.Add(B,i,badger);

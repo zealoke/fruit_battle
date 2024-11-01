@@ -10,17 +10,25 @@ uses
 type
   TTeamVar = (A,B);
 
+  // массивы с описанием членов команд
   TTeam = record
     A : TAnimalTeam;
     B : TAnimalTeam;
   end;
 
+  TStat = record
+    A    : integer; // количество побед команды ј
+    B    : integer; // количество побед команды Ѕ
+    draw : integer; // количество ничьих
+  end;
+
   TGameLogic = Class(TObject)
     private
-      team    : TTeam;
-      teamOld : TTeam;
-      teamNum : integer;
-      matches : integer;
+      team    : TTeam;   // основной состав команд
+      teamOld : TTeam;   // копи€ состава дл€ перезапуска модели
+      teamNum : integer; // количество зверей в командах
+      matches : integer; // количество сыгранных матчей
+      stat    : TStat;   // статистика матчей
     public
       constructor Create(teamNum, matches : integer);
       function ReturnTeamNum() : integer;
@@ -37,8 +45,11 @@ implementation
 
 constructor TGameLogic.Create(teamNum, matches: integer);
 begin
-  self.teamNum := teamNum;
-  self.matches := matches;
+  self.teamNum   := teamNum;
+  self.matches   := matches;
+  self.stat.A    := 0;
+  self.stat.B    := 0;
+  self.stat.draw := 0;
 end;
 
 
