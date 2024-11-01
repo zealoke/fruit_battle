@@ -63,13 +63,25 @@ begin
     self.team.A[i].Attack(self.teamNum,self.team.B,self.team.A);
     for j := 1 to self.teamNum do begin
       // проверяем в кого прилетел удар из соперников (команды Б)
-      if self.team.B[j].IsAttacked then begin
+      if self.team.B[j].IsAttacked[1] and self.team.B[j].IsAttacked[2] then begin
+        Write('Член команды А',i,' кинул яблоко в соперника Б',j,' ДВА РАЗА');
+        Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
+        self.team.B[j].ResetDamage;
+      end
+      else if self.team.B[j].IsAttacked[1] and
+          not self.team.B[j].IsAttacked[2] then begin
         Write('Член команды А',i,' кинул яблоко в соперника Б',j);
         Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
         self.team.B[j].ResetDamage;
       end;
       // проверяем не прилетело ли по своим (команды А)
-      if self.team.A[j].IsAttacked then begin
+      if self.team.A[j].IsAttacked[1] and self.team.A[j].IsAttacked[2] then begin
+        Write('Член команды А',i,' кинул яблоко в союзника  А',j,' ДВА РАЗА');
+        Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
+        self.team.A[j].ResetDamage;
+      end
+      else if self.team.A[j].IsAttacked[1] and
+          not self.team.A[j].IsAttacked[2] then begin
         Write('Член команды А',i,' кинул яблоко в союзника  А',j);
         Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
         self.team.A[j].ResetDamage;
@@ -82,13 +94,25 @@ begin
     self.team.B[i].Attack(self.teamNum,self.team.A,self.team.B);
     for j := 1 to self.teamNum do begin
       // проверяем в кого прилетел удар из соперников (команды А)
-      if self.team.A[j].IsAttacked then begin
+      if self.team.A[j].IsAttacked[1] and self.team.A[j].IsAttacked[2] then begin
+        Write('Член команды Б',i,' кинул яблоко в соперника А',j,' ДВА РАЗА');
+        Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
+        self.team.A[j].ResetDamage;
+      end
+      else if self.team.A[j].IsAttacked[1] and
+          not self.team.A[j].IsAttacked[2] then begin
         Write('Член команды Б',i,' кинул яблоко в соперника А',j);
         Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
         self.team.A[j].ResetDamage;
       end;
       // проверяем не прилетело ли по своим (команды Б)
-      if self.team.B[j].IsAttacked then begin
+      if self.team.B[j].IsAttacked[1] and self.team.B[j].IsAttacked[2] then begin
+        Write('Член команды Б',i,' кинул яблоко в союзника  Б',j,' ДВА РАЗА');
+        Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
+        self.team.B[j].ResetDamage;
+      end
+      else if self.team.B[j].IsAttacked[1] and
+          not self.team.B[j].IsAttacked[2] then begin
         Write('Член команды Б',i,' кинул яблоко в союзника  Б',j);
         Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
         self.team.B[j].ResetDamage;

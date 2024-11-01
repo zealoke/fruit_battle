@@ -12,6 +12,7 @@ const
 type
   TAnimal = Class; // предопределение класса
   TAnimalTeam = array [1..CmaxNumMemb] of TAnimal;
+  TAttacked = array [1..2] of boolean;
 
   // какие бывают звери: барсук, енот
   TBeast = (badger, raccoon);
@@ -20,14 +21,14 @@ type
   TAnimal = Class(TObject)
     private
       hp       : integer;
-      attacked : boolean;
+      attacked : TAttacked; // один зверь может быть за раз атакован дважды
       alive    : boolean;
       beast    : TBeast;
       procedure Damage();
     public
       constructor Create(beast : TBeast); overload;
       function ReturnHP(): integer;
-      function IsAttacked(): boolean;
+      function IsAttacked(): TAttacked;
       function IsAlive(): boolean;
       procedure Attack(numMemb : integer; // количество зверей в командах
 //                     соперники,   союзники
@@ -44,21 +45,25 @@ implementation
 
 constructor TAnimal.Create(beast : TBeast);
 begin
-  self.hp       := 10;
-  self.attacked := FALSE;
-  self.alive    := TRUE;
-  self.beast    := beast;
+  self.hp          := 10;
+  self.attacked[1] := FALSE;
+  self.attacked[2] := FALSE;
+  self.alive       := TRUE;
+  self.beast       := beast;
 end;
 
 procedure TAnimal.Damage;
 begin
   self.hp       := self.hp - 2;
-  self.attacked := TRUE;
+  if self.attacked[1]
+    then self.attacked[2] := TRUE
+    else self.attacked[1] := TRUE;
 end;
 
 procedure TAnimal.ResetDamage;
 begin
-  self.attacked := FALSE;
+  self.attacked[1] := FALSE;
+  self.attacked[2] := FALSE;
 end;
 
 function TAnimal.ReturnHP: integer;
@@ -71,7 +76,7 @@ begin
   IsAlive := self.alive;
 end;
 
-function TAnimal.IsAttacked: boolean;
+function TAnimal.IsAttacked: TAttacked;
 begin
   IsAttacked := self.attacked;
 end;

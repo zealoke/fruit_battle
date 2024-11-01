@@ -37,7 +37,7 @@ begin
         'Б' : Game.Add(A,i,badger);
       end;
     end;
-
+    Writeln;
     Writeln('--- Команда: Б ---');
     for i := 1 to Game.ReturnTeamNum() do begin
       beast := ' ';
@@ -52,7 +52,28 @@ begin
     end;
 
     Game.CopyToOld(); // состав команд сохранен для перезапуска
-    Game.Fight;
+    Writeln;
+
+    // ИГРАЕМ МАТЧ
+    for j := 1 to Game.ReturnMatchesNum() do begin
+      Writeln('=== Начинаем МАТЧ: ',j,' ===');
+
+      // играем раунд
+      k := 1;
+      while (k < 10) do begin
+        Writeln('--- Раунд: ',k,' ---');
+
+        Game.Fight;
+
+        k := k + 1;
+        Writeln;
+        Writeln;
+      end;
+
+    end;
+
+
+
     Readln;
 
   except
