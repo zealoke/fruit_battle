@@ -33,9 +33,10 @@ type
       constructor Create(teamNum, matches : integer);
       function ReturnTeamNum() : integer;
       function ReturnMatchesNum() : integer;
-      procedure Add(teamVar: TTeamVar; num : integer; beast : TBeast);
       procedure CopyToOld();
       procedure ReturnTeam();
+      procedure Add(teamVar: TTeamVar; num : integer; beast : TBeast);
+      procedure Fight();
   End;
 
 
@@ -52,6 +53,49 @@ begin
   self.stat.draw := 0;
 end;
 
+
+procedure TGameLogic.Fight;
+var
+  i,j : integer;
+begin
+  // члены команды А атакуют команду Б
+  for i := 1 to self.teamNum do begin
+    self.team.A[i].Attack(self.teamNum,self.team.B,self.team.A);
+    for j := 1 to self.teamNum do begin
+      // проверяем в кого прилетел удар из соперников (команды Б)
+      if self.team.B[j].IsAttacked then begin
+        Write('Член команды А',i,' кинул яблоко в соперника Б',j);
+        Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
+        self.team.B[j].ResetDamage;
+      end;
+      // проверяем не прилетело ли по своим (команды А)
+      if self.team.A[j].IsAttacked then begin
+        Write('Член команды А',i,' кинул яблоко в союзника  А',j);
+        Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
+        self.team.A[j].ResetDamage;
+      end;
+    end;
+  end;
+
+  // члены команды Б атакуют команду А
+  for i := 1 to self.teamNum do begin
+    self.team.B[i].Attack(self.teamNum,self.team.A,self.team.B);
+    for j := 1 to self.teamNum do begin
+      // проверяем в кого прилетел удар из соперников (команды А)
+      if self.team.A[j].IsAttacked then begin
+        Write('Член команды Б',i,' кинул яблоко в соперника А',j);
+        Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
+        self.team.A[j].ResetDamage;
+      end;
+      // проверяем не прилетело ли по своим (команды Б)
+      if self.team.B[j].IsAttacked then begin
+        Write('Член команды Б',i,' кинул яблоко в союзника  Б',j);
+        Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
+        self.team.B[j].ResetDamage;
+      end;
+    end;
+  end;
+end;
 
 procedure TGameLogic.CopyToOld;
 begin

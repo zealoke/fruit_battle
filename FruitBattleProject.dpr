@@ -51,7 +51,8 @@ begin
       end;
     end;
 
-    Game.CopyToOld();
+    Game.CopyToOld(); // состав команд сохранен для перезапуска
+    Game.Fight;
     Readln;
 
   except
