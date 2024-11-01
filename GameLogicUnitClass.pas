@@ -35,8 +35,9 @@ type
       function ReturnMatchesNum() : integer;
       procedure CopyToOld();
       procedure ReturnTeam();
-      procedure Add(teamVar: TTeamVar; num : integer; beast : TBeast);
+      procedure Add(teamVar : TTeamVar; num : integer; beast : TBeast);
       procedure Fight();
+      function NowIsDead(teamVar : TTeamVar; num : integer) : boolean;
   End;
 
 
@@ -118,6 +119,18 @@ begin
         self.team.B[j].ResetDamage;
       end;
     end;
+  end;
+end;
+
+function TGameLogic.NowIsDead(teamVar: TTeamVar; num: integer): boolean;
+begin
+  case teamVar of
+    A :
+      if not self.team.A[num].IsAlive then NowIsDead := FALSE
+      else NowIsDead := self.team.A[num].IsDead;
+    B :
+      if not self.team.B[num].IsAlive then NowIsDead := FALSE
+      else NowIsDead := self.team.B[num].IsDead;
   end;
 end;
 

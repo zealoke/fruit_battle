@@ -63,7 +63,15 @@ begin
       while (k < 10) do begin
         Writeln('--- Раунд: ',k,' ---');
 
-        Game.Fight;
+        Game.Fight; // бой между командами
+
+        // кто выбыл из членов команды А
+        for i := 1 to Game.ReturnTeamNum() do
+          if Game.NowIsDead(A,i) then Writeln('Участник А',i,' выбывает');
+        // кто выбыл из членов команды Б
+        for i := 1 to Game.ReturnTeamNum() do
+          if Game.NowIsDead(B,i) then Writeln('Участник Б',i,' выбывает');
+
 
         k := k + 1;
         Writeln;

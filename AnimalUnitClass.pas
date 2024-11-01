@@ -34,7 +34,7 @@ type
 //                     соперники,   союзники
                        rivalsArray, alliesArray : TAnimalTeam);
       procedure ResetDamage();
-      procedure IsDead();
+      function IsDead(): boolean;
   End;
 
 
@@ -54,7 +54,7 @@ end;
 
 procedure TAnimal.Damage;
 begin
-  self.hp       := self.hp - 2;
+  self.hp := self.hp - 2;
   if self.attacked[1]
     then self.attacked[2] := TRUE
     else self.attacked[1] := TRUE;
@@ -87,36 +87,41 @@ var
   apple  : integer;
   i      : integer;
 begin
-  case self.beast of
-    // если атакующий - барсук
-    badger :
-      begin
-        apple := 1 + Random(numMemb);
-        while not rivalsArray[apple].IsAlive do apple := 1 + Random(numMemb);
-        rivalsArray[apple].Damage;
-      end;
-    // если атакующий - енот
-    raccoon :
-      for i := 1 to 2 do begin // енот пуляет два яблока
-        chance := 1 + Random(4);
-        if (chance <= 3) then
-          begin
-            apple := 1 + Random(numMemb);
-            while not rivalsArray[apple].IsAlive do apple := 1 + Random(numMemb);
-            rivalsArray[apple].Damage;
-          end
-          else begin
-            apple := 1 + Random(numMemb);
-            while not alliesArray[apple].IsAlive do apple := 1 + Random(numMemb);
-            alliesArray[apple].Damage;
-          end;
-      end;
-  end;
+  if self.alive then
+    case self.beast of
+      // если атакующий - барсук
+      badger :
+        begin
+          apple := 1 + Random(numMemb);
+          while not rivalsArray[apple].alive do apple := 1 + Random(numMemb);
+          rivalsArray[apple].Damage;
+        end;
+      // если атакующий - енот
+      raccoon :
+        for i := 1 to 2 do begin // енот пуляет два яблока
+          chance := 1 + Random(4);
+          if (chance <= 3) then
+            begin
+              apple := 1 + Random(numMemb);
+              while not rivalsArray[apple].alive do apple := 1 + Random(numMemb);
+              rivalsArray[apple].Damage;
+            end
+            else begin
+              apple := 1 + Random(numMemb);
+              while not alliesArray[apple].alive do apple := 1 + Random(numMemb);
+              alliesArray[apple].Damage;
+            end;
+        end;
+    end;
 end;
 
-procedure TAnimal.IsDead;
+function TAnimal.IsDead: boolean;
 begin
-  if (self.hp <= 0) then self.alive := FALSE;
+  if (self.hp <= 0) then begin
+    self.alive := FALSE;
+    IsDead := TRUE;
+  end
+  else IsDead := FALSE;
 end;
 
 end.
