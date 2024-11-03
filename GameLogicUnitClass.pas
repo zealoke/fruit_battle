@@ -139,8 +139,13 @@ begin
 end;
 
 procedure TGameLogic.CopyToOld;
+var
+  i : integer;
 begin
-  self.teamOld := self.team;
+  for i := 1 to self.teamNum do begin
+    self.teamOld.A[i] := TAnimal.Create(self.team.A[i].ReturnBeast);
+    self.teamOld.B[i] := TAnimal.Create(self.team.B[i].ReturnBeast);
+  end;
 end;
 
 function TGameLogic.ReturnMatchesNum: integer;
@@ -149,8 +154,13 @@ begin
 end;
 
 procedure TGameLogic.ReturnTeam;
+var
+  i : integer;
 begin
-  self.team := self.teamOld;
+  for i := 1 to self.teamNum do begin
+    self.team.A[i] := TAnimal.Create(self.teamOld.A[i].ReturnBeast);
+    self.team.B[i] := TAnimal.Create(self.teamOld.B[i].ReturnBeast);
+  end;
 end;
 
 function TGameLogic.ReturnTeamNum: integer;

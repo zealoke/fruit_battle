@@ -28,6 +28,7 @@ type
     public
       constructor Create(beast : TBeast); overload;
       function ReturnHP(): integer;
+      function ReturnBeast(): TBeast;
       function IsAttacked(): TAttacked;
       function IsAlive(): boolean;
       procedure Attack(numMemb : integer; // количество зверей в командах
@@ -64,6 +65,11 @@ procedure TAnimal.ResetDamage;
 begin
   self.attacked[1] := FALSE;
   self.attacked[2] := FALSE;
+end;
+
+function TAnimal.ReturnBeast: TBeast;
+begin
+  ReturnBeast := self.beast;
 end;
 
 function TAnimal.ReturnHP: integer;
