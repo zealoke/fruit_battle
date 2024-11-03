@@ -12,18 +12,29 @@ uses
 var
   Game : TGameLogic;
   teamNum, matches : integer;
+  log : boolean;
+  stat : TStat;
   i,j,k : integer;
-  beast : char;
+  beast,wrLog : char;
 
 begin
   try
     Writeln('!!! ДОБРО ПОЖАЛОВАТЬ НА ФРУКТОВУЮ БИТВУ !!!');
     Writeln;
+
     Write('Введите количество участников в команде: ');
     Readln(teamNum);
+
     Write('Введите количество матчей: ');
     Readln(matches);
-    Game := TGameLogic.Create(teamNum, matches);
+
+    log := FALSE; wrLog := ' ';
+    while (wrLog <> 'Д') and (wrLog <> 'Н') do begin
+        Write('Включить подробное логирование ([Д]а [Н]ет): ');
+        Readln(wrLog);
+    end;
+    if (wrLog = 'Д') then log := TRUE;
+    Game := TGameLogic.Create(teamNum, matches, log);
 
     Writeln('--- Команда: А ---');
     for i := 1 to Game.ReturnTeamNum() do begin
@@ -62,16 +73,18 @@ begin
       // играем раунд
       k := 1;
       while not Game.Stop() do begin
-        Writeln('--- Раунд: ',k,' ---');
+        if log then Writeln('--- Раунд: ',k,' ---');
 
         Game.Fight; // бой между командами
 
         // кто выбыл из членов команды А
         for i := 1 to Game.ReturnTeamNum() do
-          if Game.NowIsDead(A,i) then Writeln('Участник А',i,' выбывает');
+          if Game.NowIsDead(A,i) then
+            if log then Writeln('Участник А',i,' выбывает');
         // кто выбыл из членов команды Б
         for i := 1 to Game.ReturnTeamNum() do
-          if Game.NowIsDead(B,i) then Writeln('Участник Б',i,' выбывает');
+          if Game.NowIsDead(B,i) then
+            if log then Writeln('Участник Б',i,' выбывает');
 
         k := k + 1;
         Writeln;

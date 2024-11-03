@@ -28,10 +28,11 @@ type
       teamOld : TTeam;   // копия состава для перезапуска модели
       teamNum : integer; // количество зверей в командах
       matches : integer; // количество сыгранных матчей
+      log     : boolean; // подробное логирование
       stat    : TStat;   // статистика матчей
       winer   : TTeamVar;
     public
-      constructor Create(teamNum, matches : integer);
+      constructor Create(teamNum, matches : integer; log : boolean); overload;
       function ReturnTeamNum() : integer;
       function ReturnMatchesNum() : integer;
       procedure CopyToOld();
@@ -40,7 +41,8 @@ type
       procedure Fight();
       function NowIsDead(teamVar : TTeamVar; num : integer) : boolean;
       function Stop() : boolean;
-      function ReturnWiner: TTeamVar;
+      function ReturnWiner(): TTeamVar;
+      function ReturnStat(): TStat;
   End;
 
 
@@ -48,10 +50,11 @@ implementation
 
 { TGameLogic }
 
-constructor TGameLogic.Create(teamNum, matches: integer);
+constructor TGameLogic.Create(teamNum, matches: integer; log : boolean);
 begin
   self.teamNum   := teamNum;
   self.matches   := matches;
+  self.log       := log;
   self.stat.A    := 0;
   self.stat.B    := 0;
   self.stat.draw := 0;
@@ -69,26 +72,26 @@ begin
     for j := 1 to self.teamNum do begin
       // проверяем в кого прилетел удар из соперников (команды Б)
       if self.team.B[j].IsAttacked[1] and self.team.B[j].IsAttacked[2] then begin
-        Write('Член команды А',i,' кинул яблоко в соперника Б',j,' ДВА РАЗА');
-        Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
+        if self.log then Write('Член команды А',i,' кинул яблоко в соперника Б',j,' ДВА РАЗА');
+        if self.log then Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
         self.team.B[j].ResetDamage;
       end
       else if self.team.B[j].IsAttacked[1] and
           not self.team.B[j].IsAttacked[2] then begin
-        Write('Член команды А',i,' кинул яблоко в соперника Б',j);
-        Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
+        if self.log then Write('Член команды А',i,' кинул яблоко в соперника Б',j);
+        if self.log then Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
         self.team.B[j].ResetDamage;
       end;
       // проверяем не прилетело ли по своим (команды А)
       if self.team.A[j].IsAttacked[1] and self.team.A[j].IsAttacked[2] then begin
-        Write('Член команды А',i,' кинул яблоко в союзника  А',j,' ДВА РАЗА');
-        Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
+        if self.log then Write('Член команды А',i,' кинул яблоко в союзника  А',j,' ДВА РАЗА');
+        if self.log then Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
         self.team.A[j].ResetDamage;
       end
       else if self.team.A[j].IsAttacked[1] and
           not self.team.A[j].IsAttacked[2] then begin
-        Write('Член команды А',i,' кинул яблоко в союзника  А',j);
-        Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
+        if self.log then Write('Член команды А',i,' кинул яблоко в союзника  А',j);
+        if self.log then Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
         self.team.A[j].ResetDamage;
       end;
     end;
@@ -100,26 +103,26 @@ begin
     for j := 1 to self.teamNum do begin
       // проверяем в кого прилетел удар из соперников (команды А)
       if self.team.A[j].IsAttacked[1] and self.team.A[j].IsAttacked[2] then begin
-        Write('Член команды Б',i,' кинул яблоко в соперника А',j,' ДВА РАЗА');
-        Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
+        if self.log then Write('Член команды Б',i,' кинул яблоко в соперника А',j,' ДВА РАЗА');
+        if self.log then Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
         self.team.A[j].ResetDamage;
       end
       else if self.team.A[j].IsAttacked[1] and
           not self.team.A[j].IsAttacked[2] then begin
-        Write('Член команды Б',i,' кинул яблоко в соперника А',j);
-        Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
+        if self.log then Write('Член команды Б',i,' кинул яблоко в соперника А',j);
+        if self.log then Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
         self.team.A[j].ResetDamage;
       end;
       // проверяем не прилетело ли по своим (команды Б)
       if self.team.B[j].IsAttacked[1] and self.team.B[j].IsAttacked[2] then begin
-        Write('Член команды Б',i,' кинул яблоко в союзника  Б',j,' ДВА РАЗА');
-        Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
+        if self.log then Write('Член команды Б',i,' кинул яблоко в союзника  Б',j,' ДВА РАЗА');
+        if self.log then Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
         self.team.B[j].ResetDamage;
       end
       else if self.team.B[j].IsAttacked[1] and
           not self.team.B[j].IsAttacked[2] then begin
-        Write('Член команды Б',i,' кинул яблоко в союзника  Б',j);
-        Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
+        if self.log then Write('Член команды Б',i,' кинул яблоко в союзника  Б',j);
+        if self.log then Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
         self.team.B[j].ResetDamage;
       end;
     end;
@@ -151,6 +154,13 @@ end;
 function TGameLogic.ReturnMatchesNum: integer;
 begin
   ReturnMatchesNum := self.matches;
+end;
+
+function TGameLogic.ReturnStat: TStat;
+begin
+  ReturnStat.A := self.stat.A;
+  ReturnStat.B := self.stat.B;
+  ReturnStat.draw := self.stat.draw;
 end;
 
 procedure TGameLogic.ReturnTeam;
