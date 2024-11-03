@@ -68,7 +68,7 @@ begin
     // ИГРАЕМ МАТЧ
     for j := 1 to Game.ReturnMatchesNum() do begin
       Writeln('=== Начинаем МАТЧ: ',j,' ===');
-      Writeln;
+      if log then Writeln;
 
       // играем раунд
       k := 1;
@@ -87,20 +87,27 @@ begin
             if log then Writeln('Участник Б',i,' выбывает');
 
         k := k + 1;
-        Writeln;
+        if log then Writeln;
       end;
 
       // определяем команду победителя матча
       case Game.ReturnWiner of
-        A    : Writeln('!!Победитель матча: команда А!!');
-        B    : Writeln('!!Победитель матча: команда Б!!');
-        draw : Writeln('!!Матч закончился НИЧЬЕЙ!!');
+        A    : Writeln('!! Победитель матча: команда А !!');
+        B    : Writeln('!! Победитель матча: команда Б !!');
+        draw : Writeln('!! Матч закончился НИЧЬЕЙ !!');
       end;
       Writeln;
 
       // загружаем состав команд из бэкапа
       Game.ReturnTeam;
     end;
+
+    stat := Game.ReturnStat;
+    Writeln;
+    Writeln('=== СТАТИСТИКА МАТЧЕЙ ===');
+    Writeln('Команда А: ', (stat.A/Game.ReturnMatchesNum *100):3:0,' %');
+    Writeln('Команда Б: ', (stat.B/Game.ReturnMatchesNum *100):3:0,' %');
+    Writeln('Ничьих:    ', (stat.draw/Game.ReturnMatchesNum *100):3:0,' %');
 
     Readln;
 
