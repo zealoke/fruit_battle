@@ -15,7 +15,7 @@ var
   log : boolean;
   stat : TStat;
   i,j,k : integer;
-  beast,wrLog : char;
+  beast, wrLog : char;
 
 begin
   try
@@ -61,53 +61,56 @@ begin
         'Б' : Game.Add(B,i,badger);
       end;
     end;
-
-    Game.CopyToOld(); // состав команд сохранен для перезапуска
     Writeln;
 
     // ИГРАЕМ МАТЧ
     for j := 1 to Game.ReturnMatchesNum() do begin
       Writeln('=== Начинаем МАТЧ: ',j,' ===');
-      if log then Writeln;
+      if Game.ReturnLog() then Writeln;
 
       // играем раунд
       k := 1;
       while not Game.Stop() do begin
-        if log then Writeln('--- Раунд: ',k,' ---');
+        if Game.ReturnLog() then Writeln('--- Раунд: ',k,' ---');
 
         Game.Fight; // бой между командами
 
         // кто выбыл из членов команды А
         for i := 1 to Game.ReturnTeamNum() do
           if Game.NowIsDead(A,i) then
-            if log then Writeln('Участник А',i,' выбывает');
+            if Game.ReturnLog() then Writeln('Участник А',i,' выбывает');
         // кто выбыл из членов команды Б
         for i := 1 to Game.ReturnTeamNum() do
           if Game.NowIsDead(B,i) then
-            if log then Writeln('Участник Б',i,' выбывает');
+            if Game.ReturnLog() then Writeln('Участник Б',i,' выбывает');
 
         k := k + 1;
-        if log then Writeln;
+        if Game.ReturnLog() then Writeln;
       end;
 
       // определяем команду победителя матча
-      case Game.ReturnWiner of
-        A    : Writeln('!! Победитель матча: команда А !!');
-        B    : Writeln('!! Победитель матча: команда Б !!');
-        draw : Writeln('!! Матч закончился НИЧЬЕЙ !!');
-      end;
+      if Game.ReturnLog then
+        case Game.ReturnWiner of
+          A    : Writeln('!! Победитель матча: команда А !!');
+          B    : Writeln('!! Победитель матча: команда Б !!');
+          draw : Writeln('!! Матч закончился НИЧЬЕЙ !!');
+        end;
       Writeln;
 
       // загружаем состав команд из бэкапа
-      Game.ReturnTeam;
+      Game.UnloadTeam;
     end;
 
-    stat := Game.ReturnStat;
+    stat := Game.ReturnStat();
+    if stat.A > stat.B then Writeln('Общий победитель: Команда А');
+    if stat.A < stat.B then Writeln('Общий победитель: Команда Б');
+    if stat.A = stat.B then Writeln('Общий победитель: Ничья!');
+
     Writeln;
     Writeln('=== СТАТИСТИКА МАТЧЕЙ ===');
-    Writeln('Команда А: ', (stat.A/Game.ReturnMatchesNum *100):3:0,' %');
-    Writeln('Команда Б: ', (stat.B/Game.ReturnMatchesNum *100):3:0,' %');
-    Writeln('Ничьих:    ', (stat.draw/Game.ReturnMatchesNum *100):3:0,' %');
+    Writeln('Команда А: ', (stat.A/Game.ReturnMatchesNum *100):3:1,' %');
+    Writeln('Команда Б: ', (stat.B/Game.ReturnMatchesNum *100):3:1,' %');
+    Writeln('Ничьих:    ', (stat.draw/Game.ReturnMatchesNum *100):3:1,' %');
 
     Readln;
 

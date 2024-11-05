@@ -35,8 +35,9 @@ type
       constructor Create(teamNum, matches : integer; log : boolean); overload;
       function ReturnTeamNum() : integer;
       function ReturnMatchesNum() : integer;
+      function ReturnLog() : boolean;
       procedure CopyToOld();
-      procedure ReturnTeam();
+      procedure UnloadTeam();
       procedure Add(teamVar : TTeamVar; num : integer; beast : TBeast);
       procedure Fight();
       function NowIsDead(teamVar : TTeamVar; num : integer) : boolean;
@@ -72,26 +73,34 @@ begin
     for j := 1 to self.teamNum do begin
       // проверяем в кого прилетел удар из соперников (команды Б)
       if self.team.B[j].IsAttacked[1] and self.team.B[j].IsAttacked[2] then begin
-        if self.log then Write('Член команды А',i,' кинул яблоко в соперника Б',j,' ДВА РАЗА');
-        if self.log then Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
+        if self.log then begin
+          Write('Член команды А',i,' кинул яблоко в соперника Б',j,' ДВА РАЗА');
+          Writeln(': У Б',j,' было ',self.team.B[j].ReturnHP + 4,' осталось ',self.team.B[j].ReturnHP,' ХП');
+        end;
         self.team.B[j].ResetDamage;
       end
       else if self.team.B[j].IsAttacked[1] and
           not self.team.B[j].IsAttacked[2] then begin
-        if self.log then Write('Член команды А',i,' кинул яблоко в соперника Б',j);
-        if self.log then Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
+        if self.log then begin
+          Write('Член команды А',i,' кинул яблоко в соперника Б',j);
+          Writeln(': У Б',j,' было ',self.team.B[j].ReturnHP + 2,' осталось ',self.team.B[j].ReturnHP,' ХП');
+        end;
         self.team.B[j].ResetDamage;
       end;
       // проверяем не прилетело ли по своим (команды А)
       if self.team.A[j].IsAttacked[1] and self.team.A[j].IsAttacked[2] then begin
-        if self.log then Write('Член команды А',i,' кинул яблоко в союзника  А',j,' ДВА РАЗА');
-        if self.log then Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
+        if self.log then begin
+          Write('Член команды А',i,' кинул яблоко в союзника  А',j,' ДВА РАЗА');
+          Writeln(': У А',j,' было ',self.team.A[j].ReturnHP + 4,' осталось ',self.team.A[j].ReturnHP,' ХП');
+        end;
         self.team.A[j].ResetDamage;
       end
       else if self.team.A[j].IsAttacked[1] and
           not self.team.A[j].IsAttacked[2] then begin
-        if self.log then Write('Член команды А',i,' кинул яблоко в союзника  А',j);
-        if self.log then Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
+        if self.log then begin
+          Write('Член команды А',i,' кинул яблоко в союзника  А',j);
+          Writeln(': У А',j,' было ',self.team.A[j].ReturnHP + 2,' осталось ',self.team.A[j].ReturnHP,' ХП');
+        end;
         self.team.A[j].ResetDamage;
       end;
     end;
@@ -103,26 +112,34 @@ begin
     for j := 1 to self.teamNum do begin
       // проверяем в кого прилетел удар из соперников (команды А)
       if self.team.A[j].IsAttacked[1] and self.team.A[j].IsAttacked[2] then begin
-        if self.log then Write('Член команды Б',i,' кинул яблоко в соперника А',j,' ДВА РАЗА');
-        if self.log then Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
+        if self.log then begin
+          Write('Член команды Б',i,' кинул яблоко в соперника А',j,' ДВА РАЗА');
+          Writeln(': У А',j,' было ',self.team.A[j].ReturnHP + 4,' осталось ',self.team.A[j].ReturnHP,' ХП');
+        end;
         self.team.A[j].ResetDamage;
       end
       else if self.team.A[j].IsAttacked[1] and
           not self.team.A[j].IsAttacked[2] then begin
-        if self.log then Write('Член команды Б',i,' кинул яблоко в соперника А',j);
-        if self.log then Writeln(': У А',j,' осталось ',self.team.A[j].ReturnHP,' ХП');
+        if self.log then begin
+          Write('Член команды Б',i,' кинул яблоко в соперника А',j);
+          Writeln(': У А',j,' было ',self.team.A[j].ReturnHP + 2,' осталось ',self.team.A[j].ReturnHP,' ХП');
+        end;
         self.team.A[j].ResetDamage;
       end;
       // проверяем не прилетело ли по своим (команды Б)
       if self.team.B[j].IsAttacked[1] and self.team.B[j].IsAttacked[2] then begin
-        if self.log then Write('Член команды Б',i,' кинул яблоко в союзника  Б',j,' ДВА РАЗА');
-        if self.log then Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
+        if self.log then begin
+          Write('Член команды Б',i,' кинул яблоко в союзника  Б',j,' ДВА РАЗА');
+          Writeln(': У Б',j,' было ',self.team.B[j].ReturnHP + 4,' осталось ',self.team.B[j].ReturnHP,' ХП');
+        end;
         self.team.B[j].ResetDamage;
       end
       else if self.team.B[j].IsAttacked[1] and
           not self.team.B[j].IsAttacked[2] then begin
-        if self.log then Write('Член команды Б',i,' кинул яблоко в союзника  Б',j);
-        if self.log then Writeln(': У Б',j,' осталось ',self.team.B[j].ReturnHP,' ХП');
+        if self.log then begin
+          Write('Член команды Б',i,' кинул яблоко в союзника  Б',j);
+          Writeln(': У Б',j,' было ',self.team.B[j].ReturnHP + 2,' осталось ',self.team.B[j].ReturnHP,' ХП');
+        end;
         self.team.B[j].ResetDamage;
       end;
     end;
@@ -151,6 +168,11 @@ begin
   end;
 end;
 
+function TGameLogic.ReturnLog: boolean;
+begin
+  ReturnLog := self.log;
+end;
+
 function TGameLogic.ReturnMatchesNum: integer;
 begin
   ReturnMatchesNum := self.matches;
@@ -163,12 +185,14 @@ begin
   ReturnStat.draw := self.stat.draw;
 end;
 
-procedure TGameLogic.ReturnTeam;
+procedure TGameLogic.UnloadTeam;
 var
   i : integer;
 begin
   for i := 1 to self.teamNum do begin
+    self.team.A[i].Free();
     self.team.A[i] := TAnimal.Create(self.teamOld.A[i].ReturnBeast);
+    self.team.B[i].Free();
     self.team.B[i] := TAnimal.Create(self.teamOld.B[i].ReturnBeast);
   end;
 end;
@@ -218,8 +242,16 @@ end;
 procedure TGameLogic.Add;
 begin
   case teamVar of
-    A : self.team.A[num] := TAnimal.Create(beast);
-    B : self.team.B[num] := TAnimal.Create(beast);
+    A :
+      begin
+        self.team.A[num]    := TAnimal.Create(beast);
+        self.teamOld.A[num] := TAnimal.Create(beast);
+      end;
+    B :
+      begin
+        self.team.B[num]    := TAnimal.Create(beast);
+        self.teamOld.B[num] := TAnimal.Create(beast);
+      end;
   end;
 end;
 end.
