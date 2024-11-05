@@ -37,7 +37,7 @@ type
       function ReturnMatchesNum() : integer;
       function ReturnLog() : boolean;
       procedure CopyToOld();
-      procedure ReturnTeam();
+      procedure UnloadTeam();
       procedure Add(teamVar : TTeamVar; num : integer; beast : TBeast);
       procedure Fight();
       function NowIsDead(teamVar : TTeamVar; num : integer) : boolean;
@@ -185,7 +185,7 @@ begin
   ReturnStat.draw := self.stat.draw;
 end;
 
-procedure TGameLogic.ReturnTeam;
+procedure TGameLogic.UnloadTeam;
 var
   i : integer;
 begin

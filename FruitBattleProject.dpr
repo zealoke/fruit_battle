@@ -100,7 +100,7 @@ begin
       Writeln;
 
       // загружаем состав команд из бэкапа
-      Game.ReturnTeam;
+      Game.UnloadTeam;
     end;
 
     stat := Game.ReturnStat();
