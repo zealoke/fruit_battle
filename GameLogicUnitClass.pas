@@ -35,6 +35,7 @@ type
       constructor Create(teamNum, matches : integer; log : boolean); overload;
       function ReturnTeamNum() : integer;
       function ReturnMatchesNum() : integer;
+      function ReturnLog() : boolean;
       procedure CopyToOld();
       procedure ReturnTeam();
       procedure Add(teamVar : TTeamVar; num : integer; beast : TBeast);
@@ -149,6 +150,11 @@ begin
     self.teamOld.A[i] := TAnimal.Create(self.team.A[i].ReturnBeast);
     self.teamOld.B[i] := TAnimal.Create(self.team.B[i].ReturnBeast);
   end;
+end;
+
+function TGameLogic.ReturnLog: boolean;
+begin
+  ReturnLog := self.log;
 end;
 
 function TGameLogic.ReturnMatchesNum: integer;

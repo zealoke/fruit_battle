@@ -68,26 +68,26 @@ begin
     // ИГРАЕМ МАТЧ
     for j := 1 to Game.ReturnMatchesNum() do begin
       Writeln('=== Начинаем МАТЧ: ',j,' ===');
-      if log then Writeln;
+      if Game.ReturnLog() then Writeln;
 
       // играем раунд
       k := 1;
       while not Game.Stop() do begin
-        if log then Writeln('--- Раунд: ',k,' ---');
+        if Game.ReturnLog() then Writeln('--- Раунд: ',k,' ---');
 
         Game.Fight; // бой между командами
 
         // кто выбыл из членов команды А
         for i := 1 to Game.ReturnTeamNum() do
           if Game.NowIsDead(A,i) then
-            if log then Writeln('Участник А',i,' выбывает');
+            if Game.ReturnLog() then Writeln('Участник А',i,' выбывает');
         // кто выбыл из членов команды Б
         for i := 1 to Game.ReturnTeamNum() do
           if Game.NowIsDead(B,i) then
-            if log then Writeln('Участник Б',i,' выбывает');
+            if Game.ReturnLog() then Writeln('Участник Б',i,' выбывает');
 
         k := k + 1;
-        if log then Writeln;
+        if Game.ReturnLog() then Writeln;
       end;
 
       // определяем команду победителя матча
@@ -105,9 +105,9 @@ begin
     stat := Game.ReturnStat;
     Writeln;
     Writeln('=== СТАТИСТИКА МАТЧЕЙ ===');
-    Writeln('Команда А: ', (stat.A/Game.ReturnMatchesNum *100):3:0,' %');
-    Writeln('Команда Б: ', (stat.B/Game.ReturnMatchesNum *100):3:0,' %');
-    Writeln('Ничьих:    ', (stat.draw/Game.ReturnMatchesNum *100):3:0,' %');
+    Writeln('Команда А: ', (stat.A/Game.ReturnMatchesNum *100):3:1,' %');
+    Writeln('Команда Б: ', (stat.B/Game.ReturnMatchesNum *100):3:1,' %');
+    Writeln('Ничьих:    ', (stat.draw/Game.ReturnMatchesNum *100):3:1,' %');
 
     Readln;
 
