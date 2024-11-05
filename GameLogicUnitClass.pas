@@ -7,6 +7,9 @@ uses
   System.SysUtils,
   AnimalUnitClass; // in 'AnimalUnitClass.pas';
 
+const
+  CmaxMatches = 1000000; // максимальное количество сыгранных матчей
+
 type
   TTeamVar = (A,B,draw);
 
@@ -36,7 +39,6 @@ type
       function ReturnTeamNum() : integer;
       function ReturnMatchesNum() : integer;
       function ReturnLog() : boolean;
-      procedure CopyToOld();
       procedure UnloadTeam();
       procedure Add(teamVar : TTeamVar; num : integer; beast : TBeast);
       procedure Fight();
@@ -155,16 +157,6 @@ begin
     B :
       if not self.team.B[num].IsAlive then NowIsDead := FALSE
       else NowIsDead := self.team.B[num].IsDead;
-  end;
-end;
-
-procedure TGameLogic.CopyToOld;
-var
-  i : integer;
-begin
-  for i := 1 to self.teamNum do begin
-    self.teamOld.A[i] := TAnimal.Create(self.team.A[i].ReturnBeast);
-    self.teamOld.B[i] := TAnimal.Create(self.team.B[i].ReturnBeast);
   end;
 end;
 
