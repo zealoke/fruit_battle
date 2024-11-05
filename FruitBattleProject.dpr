@@ -15,7 +15,7 @@ var
   log : boolean;
   stat : TStat;
   i,j,k : integer;
-  beast,wrLog : char;
+  beast, wrLog : char;
 
 begin
   try
@@ -61,8 +61,6 @@ begin
         'Б' : Game.Add(B,i,badger);
       end;
     end;
-
-    Game.CopyToOld(); // состав команд сохранен для перезапуска
     Writeln;
 
     // ИГРАЕМ МАТЧ
