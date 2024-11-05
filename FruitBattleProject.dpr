@@ -91,18 +91,23 @@ begin
       end;
 
       // определяем команду победителя матча
-      case Game.ReturnWiner of
-        A    : Writeln('!! Победитель матча: команда А !!');
-        B    : Writeln('!! Победитель матча: команда Б !!');
-        draw : Writeln('!! Матч закончился НИЧЬЕЙ !!');
-      end;
+      if Game.ReturnLog then
+        case Game.ReturnWiner of
+          A    : Writeln('!! Победитель матча: команда А !!');
+          B    : Writeln('!! Победитель матча: команда Б !!');
+          draw : Writeln('!! Матч закончился НИЧЬЕЙ !!');
+        end;
       Writeln;
 
       // загружаем состав команд из бэкапа
       Game.ReturnTeam;
     end;
 
-    stat := Game.ReturnStat;
+    stat := Game.ReturnStat();
+    if stat.A > stat.B then Writeln('Общий победитель: Команда А');
+    if stat.A < stat.B then Writeln('Общий победитель: Команда Б');
+    if stat.A = stat.B then Writeln('Общий победитель: Ничья!');
+
     Writeln;
     Writeln('=== СТАТИСТИКА МАТЧЕЙ ===');
     Writeln('Команда А: ', (stat.A/Game.ReturnMatchesNum *100):3:1,' %');
