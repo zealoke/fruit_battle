@@ -7,6 +7,9 @@ uses
   System.SysUtils,
   AnimalUnitClass; // in 'AnimalUnitClass.pas';
 
+const
+  CmaxMatches = 1000000; // максимальное количество сыгранных матчей
+
 type
   TTeamVar = (A,B,draw);
 
@@ -36,9 +39,9 @@ type
       function ReturnTeamNum() : integer;
       function ReturnMatchesNum() : integer;
       function ReturnLog() : boolean;
-      procedure CopyToOld();
       procedure UnloadTeam();
       procedure Add(teamVar : TTeamVar; num : integer; beast : TBeast);
+      function ReturnBeast(teamVar : TTeamVar; num : integer) : TBeast;
       procedure Fight();
       function NowIsDead(teamVar : TTeamVar; num : integer) : boolean;
       function Stop() : boolean;
@@ -158,13 +161,11 @@ begin
   end;
 end;
 
-procedure TGameLogic.CopyToOld;
-var
-  i : integer;
+function TGameLogic.ReturnBeast(teamVar: TTeamVar; num: integer): TBeast;
 begin
-  for i := 1 to self.teamNum do begin
-    self.teamOld.A[i] := TAnimal.Create(self.team.A[i].ReturnBeast);
-    self.teamOld.B[i] := TAnimal.Create(self.team.B[i].ReturnBeast);
+  case teamVar of
+    A : ReturnBeast := self.team.A[num].ReturnBeast();
+    B : ReturnBeast := self.team.B[num].ReturnBeast();
   end;
 end;
 
@@ -191,9 +192,18 @@ var
 begin
   for i := 1 to self.teamNum do begin
     self.team.A[i].Free();
-    self.team.A[i] := TAnimal.Create(self.teamOld.A[i].ReturnBeast);
+    try
+      self.team.A[i] := TAnimal.Create(self.teamOld.A[i].ReturnBeast);
+    except
+      self.team.A[i].Free();
+    end;
+
     self.team.B[i].Free();
-    self.team.B[i] := TAnimal.Create(self.teamOld.B[i].ReturnBeast);
+    try
+      self.team.B[i] := TAnimal.Create(self.teamOld.B[i].ReturnBeast);
+    except
+      self.team.B[i].Free();
+    end;
   end;
 end;
 
@@ -243,14 +253,20 @@ procedure TGameLogic.Add;
 begin
   case teamVar of
     A :
-      begin
+      try
         self.team.A[num]    := TAnimal.Create(beast);
         self.teamOld.A[num] := TAnimal.Create(beast);
+      except
+        self.team.A[num].Free();
+        self.teamOld.A[num].Free();
       end;
     B :
-      begin
+      try
         self.team.B[num]    := TAnimal.Create(beast);
         self.teamOld.B[num] := TAnimal.Create(beast);
+      except
+        self.team.B[num].Free();
+        self.teamOld.B[num].Free();
       end;
   end;
 end;
