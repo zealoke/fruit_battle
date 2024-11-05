@@ -183,9 +183,18 @@ var
 begin
   for i := 1 to self.teamNum do begin
     self.team.A[i].Free();
-    self.team.A[i] := TAnimal.Create(self.teamOld.A[i].ReturnBeast);
+    try
+      self.team.A[i] := TAnimal.Create(self.teamOld.A[i].ReturnBeast);
+    finally
+      self.team.A[i].Free();
+    end;
+
     self.team.B[i].Free();
-    self.team.B[i] := TAnimal.Create(self.teamOld.B[i].ReturnBeast);
+    try
+      self.team.B[i] := TAnimal.Create(self.teamOld.B[i].ReturnBeast);
+    finally
+      self.team.B[i].Free();
+    end;
   end;
 end;
 
@@ -235,14 +244,20 @@ procedure TGameLogic.Add;
 begin
   case teamVar of
     A :
-      begin
+      try
         self.team.A[num]    := TAnimal.Create(beast);
         self.teamOld.A[num] := TAnimal.Create(beast);
+      finally
+        self.team.A[num].Free();
+        self.teamOld.A[num].Free();
       end;
     B :
-      begin
+      try
         self.team.B[num]    := TAnimal.Create(beast);
         self.teamOld.B[num] := TAnimal.Create(beast);
+      finally
+        self.team.B[num].Free();
+        self.teamOld.B[num].Free();
       end;
   end;
 end;
