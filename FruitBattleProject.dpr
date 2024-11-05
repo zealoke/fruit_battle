@@ -80,6 +80,19 @@ begin
       end;
     end;
     Writeln;
+    Write('А (');
+    for i := 1 to Game.ReturnTeamNum() do 
+      case Game.ReturnBeast(A,i) of
+        badger  : Write(' Барсук');
+        raccoon : Write(' Енот');
+      end;
+    Write(' ) VS Б (');
+    for i := 1 to Game.ReturnTeamNum() do 
+      case Game.ReturnBeast(B,i) of
+        badger  : Write(' Барсук');
+        raccoon : Write(' Енот');
+      end;
+    Writeln(' )');
 
     // ИГРАЕМ МАТЧ
     for j := 1 to Game.ReturnMatchesNum() do begin

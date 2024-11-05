@@ -41,6 +41,7 @@ type
       function ReturnLog() : boolean;
       procedure UnloadTeam();
       procedure Add(teamVar : TTeamVar; num : integer; beast : TBeast);
+      function ReturnBeast(teamVar : TTeamVar; num : integer) : TBeast;
       procedure Fight();
       function NowIsDead(teamVar : TTeamVar; num : integer) : boolean;
       function Stop() : boolean;
@@ -160,6 +161,14 @@ begin
   end;
 end;
 
+function TGameLogic.ReturnBeast(teamVar: TTeamVar; num: integer): TBeast;
+begin
+  case teamVar of
+    A : ReturnBeast := self.team.A[num].ReturnBeast();
+    B : ReturnBeast := self.team.B[num].ReturnBeast();
+  end;
+end;
+
 function TGameLogic.ReturnLog: boolean;
 begin
   ReturnLog := self.log;
@@ -185,14 +194,14 @@ begin
     self.team.A[i].Free();
     try
       self.team.A[i] := TAnimal.Create(self.teamOld.A[i].ReturnBeast);
-    finally
+    except
       self.team.A[i].Free();
     end;
 
     self.team.B[i].Free();
     try
       self.team.B[i] := TAnimal.Create(self.teamOld.B[i].ReturnBeast);
-    finally
+    except
       self.team.B[i].Free();
     end;
   end;
@@ -247,7 +256,7 @@ begin
       try
         self.team.A[num]    := TAnimal.Create(beast);
         self.teamOld.A[num] := TAnimal.Create(beast);
-      finally
+      except
         self.team.A[num].Free();
         self.teamOld.A[num].Free();
       end;
@@ -255,7 +264,7 @@ begin
       try
         self.team.B[num]    := TAnimal.Create(beast);
         self.teamOld.B[num] := TAnimal.Create(beast);
-      finally
+      except
         self.team.B[num].Free();
         self.teamOld.B[num].Free();
       end;
