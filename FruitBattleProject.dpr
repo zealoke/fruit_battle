@@ -23,7 +23,7 @@ begin
     Writeln;
     
     teamNum := 0; strTeamNum := ' ';
-    while (teamNum >= CmaxNumMemb) or (teamNum <= 0) do begin
+    while (teamNum > CmaxNumMemb) or (teamNum <= 0) do begin
       Write('¬ведите количество участников в команде (не более 20): ');
       Readln(strTeamNum);
       try
@@ -35,7 +35,7 @@ begin
     end;    
 
     matches := 0; strMatches := ' ';
-    while (matches >= CmaxMatches) or (matches <= 0) do begin
+    while (matches > CmaxMatches) or (matches <= 0) do begin
       Write('¬ведите количество матчей (не более 1 000 000): ');
       Readln(strMatches);
       try
